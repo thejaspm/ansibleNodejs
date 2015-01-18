@@ -1,0 +1,33 @@
+---
+- hosts: careNhost1
+  sudo: yes
+  vars:
+    openresty-version: 1.5.12.1
+  tasks:
+    ##
+    # node.js installation 
+    #
+    - name: Node.js | Package prerequisites for node.js
+      action: apt pkg=python-software-properties state=installed
+
+    - name: Node.js | Add the node.js PPA
+      command: curl -sL https://deb.nodesource.com/setup | sudo bash -
+
+    - name: Node.js | Update the apt cache for the new repository
+      action: apt update-cache=yes
+
+    - name: Node.js | Install nodejs and npm
+      action: apt pkg={{ item }} state=installed
+      with_items:
+        - nodejs
+        - build-essential
+
+    - name: Node.js | Install MEAN dependent node modules -Bower
+      command: npm -g install bower
+
+    - name: Node.js | Install MEAN dependent node modules -Grunt
+      command: npm -g install grunt
+
+    - name: Node.js | Install MEAN dependent node modules -
+      command: npm -g install yo
+
